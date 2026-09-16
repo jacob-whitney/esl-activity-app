@@ -1,11 +1,11 @@
 import Nav from '@/app/ui/nav';
+import Login from '@/app/ui/login-form'
 
 export default function Page() {
   return (
     <main className="flex min-h-screen flex-col p-6">
       <Nav />
-
-      <p>Login Page</p>
+      <Login />
       
     </main>
   );

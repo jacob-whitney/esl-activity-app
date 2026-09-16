@@ -1,14 +1,11 @@
 import Nav from '@/app/ui/nav';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
-import styles from '@/app/ui/home.module.css';
-import Image from 'next/image';
-import { inter } from '@/app/ui/fonts'
+import Search from '@/app/ui/search'
 
 export default function Page() {
   return (
-    <main className="flex min-h-screen flex-col p-6">
+    <main className="mx-auto flex max-w-6xl min-h-screen flex-col p-6 gap-y-6 max-w-3/4">
       <Nav />
+      <Search placeholder="Search..." />
 
       <p>Home Page</p>
 
