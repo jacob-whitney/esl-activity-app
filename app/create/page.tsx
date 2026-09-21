@@ -1,4 +1,4 @@
-import Create from '@/app/ui/forms/create';
+import Create from '@/app/ui/forms/Create';
 
 export default function Page() {
   return (

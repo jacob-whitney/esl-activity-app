@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import Link from 'next/link';
-import Logo from '@/app/ui/logo';
+import Logo from '@/app/ui/Logo';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const links = [

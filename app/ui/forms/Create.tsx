@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ArrowRightIcon, DocumentArrowUpIcon } from '@heroicons/react/20/solid';
-import { Button } from '@/app/ui/button';
+import { Button } from '@/app/ui/Button';
 
 export default function CreateForm() {
   const [fileName, setFileName] = useState<string | null>(null);

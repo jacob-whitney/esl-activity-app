@@ -1,4 +1,4 @@
-import Login from '@/app/ui/forms/login'
+import Login from '@/app/ui/forms/Login'
 
 export default function Page() {
   return (
