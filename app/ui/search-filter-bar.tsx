@@ -47,7 +47,7 @@ export default function Search({
   }
 
   return (
-    <div className="flex w-full flex-col gap-3 md:flex-row md:w-3/4 md:items-center md:justify-center md:gap-4">
+    <div className="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-center md:gap-4">
       {/* Search Bar */}
       <div className="relative flex flex-1 md:max-w-[300px]">
         <label htmlFor="search" className="sr-only">
