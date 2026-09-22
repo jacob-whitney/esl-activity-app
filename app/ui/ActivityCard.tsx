@@ -3,7 +3,7 @@ import type { Activity } from "@/data/activities";
 
 export default function ActivityCard({ activity }: { activity: Activity }) {
   return (
-    <div className="w-64 overflow-hidden rounded-xl bg-gray-100 grow">
+    <div className="w-64 overflow-hidden rounded-xl bg-gray-100">
       <div className="relative h-40 overflow-hidden rounded-lg m-2 grow">
         <Image
           src={activity.imageSrc}
