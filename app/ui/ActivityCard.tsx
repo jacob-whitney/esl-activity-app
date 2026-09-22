@@ -3,8 +3,8 @@ import type { Activity } from "@/data/activities";
 
 export default function ActivityCard({ activity }: { activity: Activity }) {
   return (
-    <div className="w-64 overflow-hidden rounded-xl bg-blue-50">
-      <div className="relative h-40 w-full overflow-hidden rounded-lg m-2">
+    <div className="w-64 overflow-hidden rounded-xl bg-gray-100 grow">
+      <div className="relative h-40 overflow-hidden rounded-lg m-2 grow">
         <Image
           src={activity.imageSrc}
           alt={activity.imageAlt}
