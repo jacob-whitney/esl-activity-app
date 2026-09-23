@@ -1,9 +1,19 @@
+'use client';
+
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/app/ui/Button';
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm() {
+  const router = useRouter();
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    router.push('/dashboard');
+  }
+
   return (
-    <form className="space-y-3 mt-8">
+    <form className="space-y-3 mt-8" onSubmit={handleSubmit}>
       <div className="flex-1 md:w-1/2 rounded-lg bg-gray-50 mx-auto px-6 py-4">
         <div className="w-full">
           <div>

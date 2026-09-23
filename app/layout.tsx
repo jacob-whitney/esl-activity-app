@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
-import Nav from '@/app/ui/Nav';
 import "./globals.css";
 
 const inter = Inter({
@@ -20,10 +19,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Nav />
-        <main className="flex mx-auto min-h-screen flex-col p-6 w-full md:max-w-[1000px]">
-          {children}
-        </main>
+        {children}
       </body>
     </html>
   );
