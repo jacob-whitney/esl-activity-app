@@ -8,7 +8,7 @@ export type Attachment = {
 };
 
 export type Activity = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   imageSrc: string;
@@ -18,7 +18,7 @@ export type Activity = {
 
 const activities: Activity[] = [
   {
-    id: 0,
+    id: "directions",
     title: "Directions",
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
@@ -27,20 +27,20 @@ const activities: Activity[] = [
     attachments: [
       {
         id: 0,
-        name: "Route guidelines.pdf",
+        name: "Route Guidelines",
         url: "/attachments/route-guidelines.pdf",
         sizeBytes: 1_240_000,
       },
       {
         id:1,
-        name: "Signage reference.pdf",
+        name: "Signage Reference",
         url: "/attachments/signage-reference.pdf",
         sizeBytes: 8_400_000,
       },
     ],
   },
   {
-    id: 1,
+    id: "animals",
     title: "Animals",
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
@@ -49,7 +49,7 @@ const activities: Activity[] = [
     attachments: [],
   },
   {
-    id: 2,
+    id: "transportation",
     title: "Transportation",
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
@@ -58,7 +58,7 @@ const activities: Activity[] = [
     attachments: [],
   },
   {
-    id: 3,
+    id: "food",
     title: "Food",
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
@@ -67,7 +67,7 @@ const activities: Activity[] = [
     attachments: [],
   },
   {
-    id: 4,
+    id: "sports",
     title: "Sports",
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
@@ -76,7 +76,7 @@ const activities: Activity[] = [
     attachments: [],
   },
   {
-    id: 5,
+    id: "music",
     title: "Music",
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
@@ -85,7 +85,7 @@ const activities: Activity[] = [
     attachments: [],
   },
   {
-    id: 6,
+    id: "technology",
     title: "Technology",
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
@@ -94,7 +94,7 @@ const activities: Activity[] = [
     attachments: [],
   },
   {
-    id: 7,
+    id: "nature",
     title: "Nature",
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
@@ -103,7 +103,7 @@ const activities: Activity[] = [
     attachments: [],
   },
   {
-    id: 8,
+    id: "architecture",
     title: "Architecture",
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
@@ -112,7 +112,7 @@ const activities: Activity[] = [
     attachments: [],
   },
   {
-    id: 9,
+    id: "fashion",
     title: "Fashion",
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
