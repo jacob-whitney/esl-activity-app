@@ -1,5 +1,5 @@
 import { getActivities } from "@/data/activities";
-import ActivityCard from "@/app/ui/ActivityCard";
+import AccountActivityCard from "@/app/ui/AccountActivityCard";
 
 export default async function ActivityDashboard() {
   const activities = await getActivities();
@@ -8,7 +8,7 @@ export default async function ActivityDashboard() {
     <div className="p-0 my-8 md:p-8">
       <div className="flex flex-wrap gap-6 justify-center">
         {activities.map((activity) => (
-          <ActivityCard key={activity.id} activity={activity} />
+          <AccountActivityCard key={activity.id} activity={activity} />
         ))}
       </div>
 
