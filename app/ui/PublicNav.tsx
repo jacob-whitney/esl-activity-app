@@ -36,7 +36,7 @@ export default function Nav() {
             </nav>
             
             {/* Mobile Nav */}
-            <div className="flex flex-col items-end absolute top-[15px] right-[15px] md:hidden">
+            <div className="flex flex-col items-end absolute top-[15px] right-[15px] z-100 md:hidden">
                 <button
                   type="button"
                   onClick={() => setIsOpen((prev) => !prev)}
