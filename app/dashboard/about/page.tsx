@@ -1,5 +1,7 @@
+import About from '@/app/ui/About';
+
 export default function Page() {
   return (
-      <p>About Page</p>
+      <About />
   );
 }
