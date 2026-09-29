@@ -7,7 +7,7 @@ import DeleteActivityButton from '@/app/ui/DeleteActivityButton';
 export default function ActivityCard({ activity }: { activity: Activity }) {
   return (
     <div className="w-64 overflow-hidden rounded-xl bg-gray-100">
-      <Link href={`/activities/${activity.id}`} className="block">
+      <Link href={`/dashboard/activities/${activity.id}`} className="block">
         <div className="relative h-40 overflow-hidden rounded-lg m-2 grow">
           <Image
             src={activity.imageSrc}
