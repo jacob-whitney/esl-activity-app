@@ -27,13 +27,13 @@ const activities: Activity[] = [
     attachments: [
       {
         id: 0,
-        name: "Route Guidelines",
+        name: "route-guidelines.pdf",
         url: "/attachments/route-guidelines.pdf",
         sizeBytes: 1_240_000,
       },
       {
         id:1,
-        name: "Signage Reference",
+        name: "signage-reference.pdf",
         url: "/attachments/signage-reference.pdf",
         sizeBytes: 8_400_000,
       },

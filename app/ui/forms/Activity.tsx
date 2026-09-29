@@ -3,24 +3,32 @@
 import { useState } from 'react';
 import { ArrowRightIcon, DocumentArrowUpIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/app/ui/Button';
+import { MAX_ATTACHMENT_BYTES, type Attachment } from '@/data/activities';
+import { DocumentIcon } from '@heroicons/react/24/outline';
 
 type Activity = {
   id: string;
   title: string;
-  instructions?: string;
-  featuredImage?: string;
-  attachment?: string;
+  description?: string;
+  imageSrc?: string;
+  attachments?: Attachment[];
 };
 
 export default function ActivityForm({ activity }: { activity?: Activity }) {
   const isEditing = Boolean(activity);
 
   const [featuredImageName, setFeaturedImageName] = useState<string | null>(
-    activity?.featuredImage ?? null
+    activity?.imageSrc?.replace('/', '') ?? null
   );
-  const [attachmentName, setAttachmentName] = useState<string | null>(
-    activity?.attachment ?? null
-  );
+  const existingAttachments = activity?.attachments ?? [];
+  const [newFiles, setNewFiles] = useState<File[]>([]);
+
+  const existingBytes = existingAttachments.reduce((sum, a) => sum + a.sizeBytes, 0);
+  const newBytes = newFiles.reduce((sum, f) => sum + f.size, 0);
+  const totalBytes = existingBytes + newBytes;
+  const overLimit = totalBytes > MAX_ATTACHMENT_BYTES;
+
+  const formatMB = (bytes: number) => (bytes / (1024 * 1024)).toFixed(1);
 
   return (
     <form className="space-y-3 mt-8">
@@ -39,12 +47,13 @@ export default function ActivityForm({ activity }: { activity?: Activity }) {
               {featuredImageName ? (
                 <span className="text-gray-900">{featuredImageName}</span>
               ) : (
-                <span>Click to upload a file</span>
+                <span>Click to upload an image</span>
               )}
               <input
                 id="featuredImage"
                 name="featuredImage"
                 type="file"
+                accept="image/*"
                 className="hidden"
                 onChange={(e) => setFeaturedImageName(e.target.files?.[0]?.name ?? null)}
               />
@@ -81,44 +90,59 @@ export default function ActivityForm({ activity }: { activity?: Activity }) {
                 name="instructions"
                 rows={4}
                 placeholder="Enter activity instructions..."
-                defaultValue={activity?.instructions ?? ''}
+                defaultValue={activity?.description ?? ''}
               />
             </div>
           </div>
 
-          {/* Attachment uploader */}
+          {/* Attachments uploader */}
           <div className="mt-4">
-            <label className="mb-3 mt-5 block text-xs font-medium text-gray-900" htmlFor="attachment">
-              Attachment
+            <label className="mb-3 mt-5 block text-xs font-medium text-gray-900" htmlFor="attachments">
+              Attachments
             </label>
             <label
-              htmlFor="attachment"
+              htmlFor="attachments"
               className="flex items-center gap-2 w-full cursor-pointer rounded-md border border-dashed border-gray-300 bg-white py-3 px-5 text-sm text-gray-500 hover:border-gray-400"
             >
               <DocumentArrowUpIcon className="h-5 w-5 text-gray-400" />
-              {attachmentName ? (
-                <span className="text-gray-900">{attachmentName}</span>
-              ) : (
-                <span>Click to upload a file</span>
-              )}
+              <span>Click to upload files</span>
               <input
-                id="attachment"
-                name="attachment"
+                id="attachments"
+                name="attachments"
                 type="file"
+                multiple
                 className="hidden"
-                onChange={(e) => setAttachmentName(e.target.files?.[0]?.name ?? null)}
+                onChange={(e) => setNewFiles(Array.from(e.target.files ?? []))}
               />
             </label>
+
+            {(existingAttachments.length > 0 || newFiles.length > 0) && (
+              <ul className="mt-2 space-y-1 rounded-md bg-white px-5 py-3 text-sm text-gray-900">
+                {existingAttachments.map((a) => (
+                  <li key={a.id}>{a.name}</li>
+                ))}
+                {newFiles.map((f, i) => (
+                  <li key={`${f.name}-${i}`}>
+                    {f.name} <span className="text-xs text-gray-500">(new)</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <p className={`mt-2 text-xs ${overLimit ? 'text-red-600' : 'text-gray-500'}`}>
+              {formatMB(totalBytes)} MB of {formatMB(MAX_ATTACHMENT_BYTES)} MB used
+              {overLimit && ' – remove some files to continue'}
+            </p>
           </div>
-        </div>
 
-        <Button className="mt-4 w-full">
-          {isEditing ? 'Update Activity' : 'Create Activity'}
-          <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-        </Button>
+          <Button className="mt-4 w-full" disabled={overLimit}>
+            {isEditing ? 'Update Activity' : 'Create Activity'}
+            <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+          </Button>
 
-        <div className="flex h-8 items-end space-x-1">
-          {/* Add form errors here */}
+          <div className="flex h-8 items-end space-x-1">
+            {/* Add form errors here */}
+          </div>
         </div>
       </div>
     </form>
