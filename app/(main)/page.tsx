@@ -4,7 +4,7 @@ import ActivityDashboard from '@/app/ui/ActivityDashboard'
 export default function Page() {
   return (
     <div>
-      <SearchFilterBar placeholder="Search..." />
+      <SearchFilterBar />
       <ActivityDashboard />
     </div>
   );
