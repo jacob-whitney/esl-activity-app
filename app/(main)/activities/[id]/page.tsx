@@ -41,12 +41,12 @@ export default async function ActivityPage({ params }: PageProps) {
             <ul className="flex flex-row flex-wrap space-y-2 space-x-10">
               {activity.attachments.map((file) => (
                 <li key={file.url} className="flex flex-row">
-                  <DocumentIcon className="h-5 w-5 mr-2.5 text-blue-700" />
+                  <DocumentIcon className="h-5 w-5 mr-2.5 text-primary" />
                   <Link
                     href={file.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
+                    className="text-primary hover:underline"
                   >
                     {file.name}
                   </Link>
@@ -56,7 +56,7 @@ export default async function ActivityPage({ params }: PageProps) {
           </div>
         )}
 
-        <p className="mt-4 text-gray-700">{activity.description}</p>
+        <p className="mt-4">{activity.description}</p>
       </div>
     </div>
   );

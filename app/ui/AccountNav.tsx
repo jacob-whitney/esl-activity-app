@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import Logo from '@/app/ui/Logo';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Button } from '@/components/ui/button';
 
 const links = [
     { label: 'About', href: '/dashboard/about' },
@@ -19,7 +20,7 @@ export default function Nav() {
 
     return (
         <header className="mx-auto flex max-w-6xl items-center justify-between px-6 md:py-8">
-            <Link href="/dashboard" className="flex items-center gap-2 md:mr-[4rem]">
+            <Link href="/dashboard" className="flex items-center gap-2 md:mr-16">
                 <Logo />
             </Link>
             {/* Desktop Nav */}
@@ -36,22 +37,21 @@ export default function Nav() {
             </nav>
             
             {/* Mobile Nav */}
-            <div className="flex flex-col items-end absolute top-[15px] right-[15px] z-100 md:hidden">
-                <button
-                  type="button"
+            <div className="flex flex-col items-end absolute top-3.75 right-3.75 z-100 md:hidden">
+                <Button
+                  variant="ghost"
                   onClick={() => setIsOpen((prev) => !prev)}
-                  className="shrink w-11 rounded-md p-2 hover:bg-black hover:text-white md:hidden"
                   aria-label={isOpen ? 'Close menu' : 'Open menu'}
                   aria-expanded={isOpen}
                   aria-controls="mobile-menu"
                 >
-                    {isOpen ? <XMarkIcon className="w-7" /> : <Bars3Icon className="w-7" />}
-                </button>
+                    {isOpen ? <XMarkIcon className="size-7" /> : <Bars3Icon className="size-7" />}
+                </Button>
 
                 <nav
                     id="mobile-menu"
                     className={clsx(
-                    'overflow-hidden bg-white rounded-md transition-[max-height] duration-300 ease-in-out md:hidden',
+                    'overflow-hidden bg-background rounded-md transition-[max-height] duration-300 ease-in-out md:hidden',
                     isOpen ? 'max-h-96' : 'max-h-0',
                     )}
                 >
@@ -64,8 +64,8 @@ export default function Nav() {
                             href={link.href}
                             onClick={() => setIsOpen(false)}
                             className={clsx(
-                            'flex items-center gap-2 rounded-md p-3 text-sm font-light hover:bg-gray-100',
-                            { 'bg-gray-100': isActive },
+                            'flex items-center gap-2 rounded-md p-3 text-sm font-light hover:bg-muted',
+                            { 'bg-muted': isActive },
                             )}
                         >
                             {link.label}

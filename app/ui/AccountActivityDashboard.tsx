@@ -13,7 +13,7 @@ export default async function ActivityDashboard() {
       </div>
 
       {activities.length === 0 && (
-        <p className="text-gray-500">No activities yet.</p>
+        <p className="text-foreground/50">No activities yet.</p>
       )}
     </div>
   );

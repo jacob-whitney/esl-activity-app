@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import { TrashIcon } from '@heroicons/react/20/solid';
 import { deleteActivity } from '@/app/lib/actions';
+import { Button } from '@/components/ui/button';
 
 export default function DeleteActivityButton({
   id, 
@@ -23,49 +24,47 @@ export default function DeleteActivityButton({
 
   return (
     <>
-      <button
-        type="button" 
+      <Button
+        variant="icon"
         onClick={() => setOpen(true)}
         aria-label={`Delete ${title}`}
-        className="flex h-8 w-8 items-center justify-center rounded-full cursor-pointer bg-black text-white hover:bg-gray-600">
-        <TrashIcon className="h-4 w-4"></TrashIcon>
-      </button>
+      >
+        <TrashIcon className="h-4 w-4" />
+      </Button>
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
           onClick={() => !isPending && setOpen(false)}
         >
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="delete-modal-title"
-            className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl"
+            className="w-full max-w-sm rounded-xl bg-background p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 id="delete-modal-title" className="text-lg font-semibold text-gray-900">
+            <h2 id="delete-modal-title" className="text-lg font-semibold">
               Delete activity?
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-foreground/60">
               Are you sure you want to delete <strong>{title}</strong>? This cannot be undone.
             </p>
             <div className="mt-6 flex justify-end gap-3">
-              <button
-                type="button"
+              <Button
+                variant="secondary"
                 onClick={() => setOpen(false)}
                 disabled={isPending}
-                className="rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 disabled:opacity-50"
               >
                 Cancel
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="destructive"
                 onClick={handleDelete}
                 disabled={isPending}
-                className="rounded md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
               >
                 {isPending ? 'Deleting...' : 'Delete'}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

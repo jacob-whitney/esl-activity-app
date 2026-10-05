@@ -1,10 +1,10 @@
-import SearchBar from '@/app/ui/SearchFilterBar'
+import SearchFilterBar from '@/app/ui/SearchFilterBar'
 import ActivityDashboard from '@/app/ui/ActivityDashboard'
 
 export default function Page() {
   return (
     <div>
-      <SearchBar placeholder="Search..." />
+      <SearchFilterBar placeholder="Search..." />
       <ActivityDashboard />
     </div>
   );
