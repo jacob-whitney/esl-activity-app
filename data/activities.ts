@@ -7,9 +7,15 @@ export type Attachment = {
   sizeBytes: number;
 };
 
+export type Category = {
+  id: string;
+  name: string;
+}
+
 export type Activity = {
   id: string;
   title: string;
+  categories: Category[];
   description: string;
   imageSrc: string;
   imageAlt: string;
@@ -20,6 +26,16 @@ const activities: Activity[] = [
   {
     id: "directions",
     title: "Directions",
+    categories: [
+      {
+        id:"vocab",
+        name:"Vocab",
+      },
+      {
+        id:"conversation",
+        name:"Conversation",
+      },
+    ],
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
     imageSrc: "/directions.jpg",
@@ -42,6 +58,7 @@ const activities: Activity[] = [
   {
     id: "animals",
     title: "Animals",
+    categories: [],
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
     imageSrc: "/animals.jpg",
@@ -51,6 +68,7 @@ const activities: Activity[] = [
   {
     id: "transportation",
     title: "Transportation",
+    categories: [],
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
     imageSrc: "/transportation.jpg",
@@ -60,6 +78,7 @@ const activities: Activity[] = [
   {
     id: "food",
     title: "Food",
+    categories: [],
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
     imageSrc: "/food.jpg",
@@ -69,6 +88,7 @@ const activities: Activity[] = [
   {
     id: "sports",
     title: "Sports",
+    categories: [],
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
     imageSrc: "/sports.jpg",
@@ -78,6 +98,7 @@ const activities: Activity[] = [
   {
     id: "music",
     title: "Music",
+    categories: [],
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
     imageSrc: "/music.jpg",
@@ -87,6 +108,7 @@ const activities: Activity[] = [
   {
     id: "technology",
     title: "Technology",
+    categories: [],
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
     imageSrc: "/technology.jpg",
@@ -96,6 +118,7 @@ const activities: Activity[] = [
   {
     id: "nature",
     title: "Nature",
+    categories: [],
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
     imageSrc: "/nature.jpg",
@@ -105,6 +128,7 @@ const activities: Activity[] = [
   {
     id: "architecture",
     title: "Architecture",
+    categories: [],
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
     imageSrc: "/architecture.jpg",
@@ -114,6 +138,7 @@ const activities: Activity[] = [
   {
     id: "fashion",
     title: "Fashion",
+    categories: [],
     description:
       "Nobis maxime temporibus veritatis est ut est. Est voluptatem quas incidunt deleniti. Magnam in repellendus cupiditate quasi quidem consequatur.",
     imageSrc: "/fashion.jpg",
