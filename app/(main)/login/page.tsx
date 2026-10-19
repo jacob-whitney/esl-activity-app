@@ -3,7 +3,7 @@ import PageTitle from '@/app/ui/PageTitle';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 
 
-export default function Page() {
+export default function LoginPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <PageTitle>

@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
 import ActivityForm from '@/app/ui/forms/Activity';
 import { getActivities } from "@/data/activities";
-import PageTitle from '@/app/ui/AccountPageTitle';
+import PageTitle from '@/app/ui/PageTitle';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditActivityPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const activities = await getActivities();
   const activity = activities.find((a) => a.id === id);

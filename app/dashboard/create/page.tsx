@@ -1,8 +1,8 @@
-import PageTitle from '@/app/ui/AccountPageTitle';
+import PageTitle from '@/app/ui/PageTitle';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import ActivityForm from '@/app/ui/forms/Activity';
 
-export default function Page() {
+export default function CreateActivityPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <PageTitle>

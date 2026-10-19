@@ -1,7 +1,7 @@
 import SearchFilterBar from '@/app/ui/SearchFilterBar'
 import AccountActivityDashboard from '@/app/ui/AccountActivityDashboard'
 
-export default function Page() {
+export default function DashboardPage() {
   return (
     <div>
       <SearchFilterBar />
