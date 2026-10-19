@@ -4,8 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { PencilIcon } from "@heroicons/react/20/solid";
-import type { Activity } from "@/data/mockActivities";
+import type { Activity } from "@/lib/activities";
 import DeleteActivityButton from "@/app/ui/DeleteActivityButton";
+
+const MAX_DESC_LENGTH = 150;
 
 export default function ActivityCard({ activity }: { activity: Activity }) {
   const pathname = usePathname();
@@ -13,13 +15,18 @@ export default function ActivityCard({ activity }: { activity: Activity }) {
 
   const basePath = isDashboard ? "/dashboard/activities" : "/activities";
 
+  const shortDesc =
+    activity.description.length > MAX_DESC_LENGTH
+      ? `${activity.description.slice(0, MAX_DESC_LENGTH).trimEnd()}...`
+      : activity.description
+
   return (
     <div className="w-64 overflow-hidden rounded-xl bg-muted text-muted-foreground">
       <Link href={`${basePath}/${activity.id}`} className="block">
         <div className="relative h-40 overflow-hidden rounded-lg m-2 grow">
           <Image
-            src={activity.imageSrc}
-            alt={activity.imageAlt}
+            src={`/images/${activity.image_src}`}
+            alt={activity.image_alt}
             fill
             className="object-cover"
             sizes="256px"
@@ -30,7 +37,7 @@ export default function ActivityCard({ activity }: { activity: Activity }) {
             {activity.title}
           </h3>
           <p className="mt-1 text-sm text-foreground/70">
-            {activity.description}
+            {shortDesc}
           </p>
         </div>
       </Link>

@@ -1,8 +1,12 @@
-import { getActivities } from "@/data/mockActivities";
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
+import { getActivities } from "@/lib/activities";
 import ActivityCard from "@/app/ui/ActivityCard";
 
 export default async function ActivityDashboard() {
-  const activities = await getActivities();
+  const cookieStore = await cookies();
+    const supabase = createClient(cookieStore);
+  const activities = await getActivities(supabase);
 
   return (
     <div className="p-0 my-8 md:p-8">

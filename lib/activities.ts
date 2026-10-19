@@ -22,7 +22,6 @@ export type Activity = {
   categories: Category[];
 };
 
-// Shape of the raw nested row Supabase returns
 type ActivityRow = Omit<Activity, "categories"> & {
   activity_categories: {
     sort_order: number;
@@ -66,4 +65,39 @@ export async function getActivity(
       .map((ac) => ac.categories)
       .filter((c): c is Category => c !== null),
   };
+}
+
+export async function getActivities(
+  supabase: SupabaseClient
+): Promise<Activity[]> {
+  const { data, error } = await supabase
+    .from("activities")
+    .select(
+      `
+      id,
+      title,
+      description,
+      image_src,
+      image_alt,
+      attachments ( id, name, url, size_bytes ),
+      activity_categories (
+        sort_order,
+        categories ( id, name )
+      )
+    `
+    )
+    .order("sort_order")
+    .order("id", { referencedTable: "attachments" })
+    .order("sort_order", { referencedTable: "activity_categories" });
+
+  if (error) throw error;
+
+  return (data as unknown as ActivityRow[]).map(
+    ({ activity_categories, ...activity }) => ({
+      ...activity,
+      categories: activity_categories
+        .map((ac) => ac.categories)
+        .filter((c): c is Category => c !== null),
+    })
+  );
 }
