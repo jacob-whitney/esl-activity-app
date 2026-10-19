@@ -1,11 +1,11 @@
 import SearchFilterBar from '@/app/ui/SearchFilterBar'
-import AccountActivityDashboard from '@/app/ui/AccountActivityDashboard'
+import ActivityDashboard from '@/app/ui/ActivityDashboard'
 
 export default function DashboardPage() {
   return (
     <div>
       <SearchFilterBar />
-      <AccountActivityDashboard />
+      <ActivityDashboard />
     </div>
   );
 }
