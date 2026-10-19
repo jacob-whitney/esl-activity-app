@@ -1,4 +1,4 @@
-import { getActivities } from "@/data/activities";
+import { getActivities } from "@/data/mockActivities";
 import ActivityCard from "@/app/ui/ActivityCard";
 
 export default async function ActivityDashboard() {

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { PencilIcon } from '@heroicons/react/20/solid';
-import type { Activity } from "@/data/activities";
+import type { Activity } from "@/data/mockActivities";
 import DeleteActivityButton from '@/app/ui/DeleteActivityButton';
 
 export default function ActivityCard({ activity }: { activity: Activity }) {

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { ArrowRightIcon, DocumentArrowUpIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/components/ui/button';
-import { MAX_ATTACHMENT_BYTES, type Attachment } from '@/data/activities';
+import { MAX_ATTACHMENT_BYTES, type Attachment } from '@/data/mockActivities';
 import { DocumentIcon } from '@heroicons/react/24/outline';
 
 type Activity = {

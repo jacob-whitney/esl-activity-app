@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import type { Activity } from "@/data/activities";
+import type { Activity } from "@/data/mockActivities";
 
 export default function ActivityCard({ activity }: { activity: Activity }) {
   return (

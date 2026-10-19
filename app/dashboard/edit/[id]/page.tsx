@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import ActivityForm from '@/app/ui/forms/Activity';
-import { getActivities } from "@/data/activities";
+import { getActivities } from "@/data/mockActivities";
 import PageTitle from '@/app/ui/PageTitle';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 
