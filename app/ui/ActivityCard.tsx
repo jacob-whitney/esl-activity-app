@@ -21,7 +21,7 @@ export default function ActivityCard({ activity }: { activity: Activity }) {
       : activity.description
 
   return (
-    <div className="w-64 overflow-hidden rounded-xl bg-muted text-muted-foreground">
+    <div className="flex flex-col justify-between w-64 overflow-hidden rounded-xl bg-muted text-muted-foreground">
       <Link href={`${basePath}/${activity.id}`} className="block">
         <div className="relative h-40 overflow-hidden rounded-lg m-2 grow">
           <Image

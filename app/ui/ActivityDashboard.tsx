@@ -1,11 +1,9 @@
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
 import { getActivities } from "@/lib/activities";
 import ActivityCard from "@/app/ui/ActivityCard";
 
 export default async function ActivityDashboard() {
-  const cookieStore = await cookies();
-    const supabase = createClient(cookieStore);
+  const supabase = await createClient();
   const activities = await getActivities(supabase);
 
   return (
