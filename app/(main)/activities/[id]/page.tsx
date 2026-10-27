@@ -1,5 +1,4 @@
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
 import { getActivity } from "@/lib/activities";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -14,8 +13,7 @@ interface PageProps {
 
 export default async function ActivityPage({ params }: PageProps) {
   const { id } = await params;
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
   const activity = await getActivity(supabase, id);
 
   if (!activity) notFound();
