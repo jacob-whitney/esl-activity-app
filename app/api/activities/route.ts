@@ -99,18 +99,6 @@ export async function POST(request: NextRequest) {
     // The creator is assigned by the on_activity_created trigger, so no assignment insert here.
     id = inserted.id;
 
-    // Assign the activity to the user who created it
-    const { error: assignError } = await supabase
-      .from("activity_assignments")
-      .insert({ activity_id: id, user_id: user.id });
-
-    if (assignError) {
-      return NextResponse.json(
-        { error: assignError.message, code: "DATABASE_ERROR" },
-        { status: 500 }
-      );
-    }
-
     const syncError = await syncActivityRelations(supabase, id, body);
     if (syncError) {
       return NextResponse.json(
