@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 export const STORAGE_BUCKET = "activities";
 
 /**
@@ -42,4 +43,14 @@ export function resolveImageSrc(imageSrc: string | null | undefined): string {
   if (!imageSrc) return "/images/placeholder.png"; // optional fallback
   if (/^https?:\/\//i.test(imageSrc)) return imageSrc;
   return `/images/${imageSrc}`;
+}
+
+// Turns a stored value into a usable public URL for a file in the bucket.
+export function resolveAttachmentUrl(url: string | null | undefined): string {
+  if (!url) return "#";
+  if (/^https?:\/\//i.test(url)) return url; // already a full URL
+
+  // strip a legacy "/attachments/" prefix if present
+  const filename = url.replace(/^\/?attachments\//, "");
+  return `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/attachments/${filename}`;
 }

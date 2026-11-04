@@ -6,7 +6,7 @@ import Link from "next/link";
 import { DocumentIcon } from "@heroicons/react/24/outline";
 import PageTitle from "@/app/ui/PageTitle";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import { resolveImageSrc } from "@/lib/storage";
+import { resolveImageSrc, resolveAttachmentUrl } from "@/lib/storage";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -58,7 +58,7 @@ export default async function ActivityPage({ params }: PageProps) {
                 <li key={file.id} className="flex flex-row">
                   <DocumentIcon className="h-5 w-5 mr-2.5 text-primary" />
                   <Link
-                    href={file.url}
+                    href={resolveAttachmentUrl(file.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary hover:underline"
