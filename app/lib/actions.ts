@@ -107,7 +107,3 @@ export async function signout() {
   revalidatePath('/login', 'layout')
   redirect('/')
 }
-
-export async function deleteActivity(id: string) {
-  revalidatePath('/activites');
-}

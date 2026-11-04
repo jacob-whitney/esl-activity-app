@@ -195,22 +195,23 @@ export async function DELETE(
 
     const fileUrls = [activityRow.image_src, ...(attachmentRows ?? []).map((a) => a.url)];
 
-    // Remove child rows first (skip if your FKs use ON DELETE CASCADE)
-    for (const table of ["attachments", "activity_categories", "activity_assignments"]) {
-      const { error } = await supabase.from(table).delete().eq("activity_id", id);
-      if (error) {
-        return NextResponse.json(
-          { error: error.message, code: "DATABASE_ERROR" },
-          { status: 500 }
-        );
-      }
-    }
+    // Deletes activities and relies on Supabase DELETE ON CASCADE
+    const { data: deletedRows, error: deleteError } = await supabase
+      .from("activities")
+      .delete()
+      .eq("id", id)
+      .select("id");
 
-    const { error: deleteError } = await supabase.from("activities").delete().eq("id", id);
     if (deleteError) {
       return NextResponse.json(
         { error: deleteError.message, code: "DATABASE_ERROR" },
         { status: 500 }
+      );
+    }
+    if (!deletedRows || deletedRows.length === 0) {
+      return NextResponse.json(
+        { error: "Activity was not deleted. You may not be assigned to it.", code: "DELETE_BLOCKED" },
+        { status: 403 }
       );
     }
 
