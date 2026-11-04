@@ -36,7 +36,24 @@ export async function updateSession(request: NextRequest) {
 
   // IMPORTANT: If you remove getClaims() and you use server-side rendering
   // with the Supabase client, your users may be randomly logged out.
-  await supabase.auth.getClaims()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const { pathname } = request.nextUrl
+
+  // Protect /dashboard
+  if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/login'
+    url.searchParams.set('next', request.nextUrl.pathname)
+    return NextResponse.redirect(url)
+  }
+
+  // API: return 401 JSON instead of a redirect
+  if (!user && pathname.startsWith('/api') && request.method !== 'GET') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
   return supabaseResponse
 }
