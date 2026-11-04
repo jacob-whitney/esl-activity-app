@@ -6,6 +6,7 @@ import Link from "next/link";
 import { DocumentIcon } from "@heroicons/react/24/outline";
 import PageTitle from "@/app/ui/PageTitle";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
+import { resolveImageSrc } from "@/lib/storage";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -27,7 +28,7 @@ export default async function ActivityPage({ params }: PageProps) {
       <div className="max-w-2xl mx-auto p-6">
         <div className="relative h-64 w-full rounded-xl overflow-hidden">
           <Image
-            src={`/images/${activity.image_src}`}
+            src={resolveImageSrc(activity.image_src)}
             alt={activity.image_alt}
             fill
             className="object-cover"

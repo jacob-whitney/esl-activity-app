@@ -1,10 +1,22 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  allowedDevOrigins: [`http://${process.env.HOST_IP}:3000`]
-};
+const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
+  : undefined;
 
-/* See https://nextjs.org/docs/pages/guides/environment-variables */
+const nextConfig: NextConfig = {
+  allowedDevOrigins: [`http://${process.env.HOST_IP}:3000`],
+  images: {
+    remotePatterns: supabaseHostname
+      ? [
+          {
+            protocol: "https",
+            hostname: supabaseHostname,
+            pathname: "/storage/v1/object/public/activities/**",
+          },
+        ]
+      : [],
+  },
+};
 
 export default nextConfig;

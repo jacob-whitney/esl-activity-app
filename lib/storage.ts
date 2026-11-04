@@ -16,7 +16,7 @@ export function storagePathFromUrl(url: string | null | undefined): string | nul
   return path ? decodeURIComponent(path) : null;
 }
 
-/** Removes the bucket files behind the given public URLs. Returns an error message or null. */
+// Removes the bucket files behind the given public URLs. Returns an error message or null. 
 export async function removeStorageFiles(
   supabase: SupabaseClient,
   urls: Array<string | null | undefined>
@@ -35,4 +35,11 @@ export async function removeStorageFiles(
     return `Only ${data?.length ?? 0} of ${paths.length} files were removed from storage`;
   }
   return null;
+}
+
+// Returns a usable image src for an activity.
+export function resolveImageSrc(imageSrc: string | null | undefined): string {
+  if (!imageSrc) return "/images/placeholder.png"; // optional fallback
+  if (/^https?:\/\//i.test(imageSrc)) return imageSrc;
+  return `/images/${imageSrc}`;
 }

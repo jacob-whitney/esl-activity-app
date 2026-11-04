@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { PencilIcon } from "@heroicons/react/20/solid";
 import type { Activity } from "@/lib/activities";
 import DeleteActivityButton from "@/app/ui/DeleteActivityButton";
+import { resolveImageSrc } from "@/lib/storage";
 
 const MAX_DESC_LENGTH = 150;
 
@@ -31,7 +32,7 @@ export default function ActivityCard({
       <Link href={`${basePath}/${activity.id}`} className="block">
         <div className="relative h-40 overflow-hidden rounded-lg m-2 grow">
           <Image
-            src={`/images/${activity.image_src}`}
+            src={resolveImageSrc(activity.image_src)}
             alt={activity.image_alt}
             fill
             className="object-cover"
