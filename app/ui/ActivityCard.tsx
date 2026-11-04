@@ -9,7 +9,13 @@ import DeleteActivityButton from "@/app/ui/DeleteActivityButton";
 
 const MAX_DESC_LENGTH = 150;
 
-export default function ActivityCard({ activity }: { activity: Activity }) {
+export default function ActivityCard({ 
+  activity,
+  canEdit = false,
+}: { 
+  activity: Activity;
+  canEdit?: boolean;
+ }) {
   const pathname = usePathname();
   const isDashboard = pathname.startsWith("/dashboard");
 
@@ -42,7 +48,7 @@ export default function ActivityCard({ activity }: { activity: Activity }) {
         </div>
       </Link>
 
-      {isDashboard && (
+      {isDashboard && canEdit && (
         <div className="flex justify-end gap-2 px-4 pb-3">
           <Link
             href={`/dashboard/edit/${activity.id}`}
