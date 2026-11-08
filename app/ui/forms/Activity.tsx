@@ -93,10 +93,8 @@ export default function ActivityForm({ activity, categories }: Props) {
 
     setSubmitting(true);
     setError(null);
-    setSaved(false);
 
     try {
-      // Upload files to storage first, then send URLs to the API
       let imageSrc: string | undefined;
       if (imageFile) imageSrc = await uploadFile(imageFile, 'images');
 
@@ -131,23 +129,10 @@ export default function ActivityForm({ activity, categories }: Props) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Something went wrong');
 
-      const result = data as FormattedActivity;
-      setCategoryIds(result.categoryIds);
-      setNewCategories([]);
-      setExistingAttachments(result.attachments);
-      setRemovedAttachmentIds([]);
-      setNewFiles([]);
-      setImageFile(null);
-      setSaved(true);
-      if (isEditing && result.id !== activity!.id) {
-        // Title changed, so the slug (id) changed: move to the new edit URL
-        router.replace(`/dashboard/edit/${encodeURIComponent(result.id)}`);
-      } else {
-        router.refresh();
-      }
+      router.push('/dashboard');
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
-    } finally {
       setSubmitting(false);
     }
   }
