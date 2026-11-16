@@ -7,6 +7,7 @@ import { DocumentIcon } from "@heroicons/react/24/outline";
 import PageTitle from "@/app/ui/PageTitle";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { resolveImageSrc, resolveAttachmentUrl } from "@/lib/storage";
+import ActivityActions from "@/app/ui/ActivityActions";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -18,6 +19,26 @@ export default async function ActivityPage({ params }: PageProps) {
   const activity = await getActivity(supabase, id);
 
   if (!activity) notFound();
+
+  // getUser validates the session
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+   // Activity IDs assigned to this user
+  let assignedIds = new Set<string>();
+  if (user) {
+    const { data, error } = await supabase
+      .from("activity_assignments")
+      .select("activity_id")
+      .eq("user_id", user.id);
+
+    if (error) {
+      console.error("Failed to load assignments:", error.message);
+    } else {
+      assignedIds = new Set(data.map((row) => row.activity_id));
+    }
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -35,7 +56,14 @@ export default async function ActivityPage({ params }: PageProps) {
             sizes="624px"
           />
         </div>
-        <h1 className="mt-6 text-3xl font-bold">{activity.title}</h1>
+        <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
+          <h1 className="text-3xl font-bold">{activity.title}</h1>
+          <ActivityActions 
+            id={activity.id} 
+            title={activity.title} 
+            canEdit={assignedIds.has(activity.id)}
+          />
+        </div>
 
         {activity.categories.length > 0 && (
           <ul className="mt-3 flex flex-wrap gap-2">
