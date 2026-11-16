@@ -7,7 +7,7 @@ import Link from 'next/link';
 import Logo from '@/app/ui/Logo';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/button';
-import { signout } from '@/app/lib/actions';
+import { signout } from '@/lib/actions';
 
 const links = [
   { label: 'About', href: '/dashboard/about' },
