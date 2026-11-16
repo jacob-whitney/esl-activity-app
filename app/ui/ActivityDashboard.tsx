@@ -12,7 +12,7 @@ export default async function ActivityDashboard({
   const supabase = await createClient();
   const activities = await getActivities(supabase);
 
-  // getUser validates the session; prefer it over getSession on the server
+  // getUser validates the session
   const {
     data: { user },
   } = await supabase.auth.getUser();
