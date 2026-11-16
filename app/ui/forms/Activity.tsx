@@ -87,9 +87,9 @@ export default function ActivityForm({ activity, categories }: Props) {
     setRemovedAttachmentIds((prev) => [...prev, id]);
   };
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (overLimit) return;
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  e.preventDefault();
+  if (overLimit) return;
 
     setSubmitting(true);
     setError(null);
