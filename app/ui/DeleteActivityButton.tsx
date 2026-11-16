@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { TrashIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/components/ui/button';
 
@@ -16,6 +16,9 @@ export default function DeleteActivityButton({
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  const pathname = usePathname();
+  const isDetailView = pathname.startsWith("/dashboard/activities");
 
   function closeModal() {
     if (isPending) return;
@@ -52,11 +55,13 @@ export default function DeleteActivityButton({
   return (
     <>
       <Button
-        variant="icon"
+        variant={isDetailView ? 'secondary' : 'outline'}
         onClick={() => setOpen(true)}
         aria-label={`Delete ${title}`}
+        className="w-full justify-center gap-2"
       >
-        <TrashIcon className="h-4 w-4" />
+        <TrashIcon className="h-5 w-5" />
+        Delete
       </Button>
 
       {open && (
