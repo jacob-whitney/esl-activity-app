@@ -32,19 +32,19 @@ export default function ActivityCard({
   return (
     <div className="flex flex-col justify-between w-64 overflow-hidden rounded-xl bg-muted text-muted-foreground">
       <div>
-        <div className="relative h-40 overflow-hidden rounded-lg m-2 grow">
-          <Link
-            href={`${basePath}/${activity.id}`}
-          >
-          <Image
-            src={resolveImageSrc(activity.image_src)}
-            alt={activity.image_alt}
-            fill
-            className="object-cover"
-            sizes="256px"
-          />
-          </Link>
-        </div>
+        <Link
+          href={`${basePath}/${activity.id}`}
+        >
+          <div className="relative h-40 overflow-hidden rounded-lg m-2 grow">
+            <Image
+              src={resolveImageSrc(activity.image_src)}
+              alt={activity.image_alt}
+              fill
+              className="object-cover"
+              sizes="256px"
+            />
+          </div>
+        </Link>
         <div className="px-4 pb-4 pt-2">
           <h3 className="text-lg font-semibold text-foreground">
             {activity.title}
