@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/components/ui/button';
-import { signup, type SignupState } from '@/lib/actions';
+import { signup, type SignupState } from '@/lib/authActions';
 import AlertBar from '@/app/ui/AlertBar';
 
 const initialState: SignupState = { alerts: [] };
