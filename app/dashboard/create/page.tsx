@@ -2,7 +2,7 @@ import PageTitle from '@/app/ui/PageTitle';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import ActivityForm from '@/app/ui/forms/Activity';
 import { createClient } from '@/lib/supabase/server';
-import { fetchCategories } from '@/lib/options';
+import { fetchCategories } from '@/lib/categories';
 
 export default async function CreateActivityPage() {
   const supabase = await createClient();

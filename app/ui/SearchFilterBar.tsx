@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Search } from 'lucide-react';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
+import type { Category } from '@/lib/activities';
 import {
   Select,
   SelectContent,
@@ -14,41 +15,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-type Category = {
-  id: string;
-  name: string;
-};
-
-export default function SearchFilterBar() {
+export default function SearchFilterBar({ categories }: { categories: Category[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const dashboard = pathname.startsWith('/dashboard');
-
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function loadCategories() {
-      try {
-        const res = await fetch('/api/categories', { signal: controller.signal });
-        if (!res.ok) throw new Error('Failed to load categories');
-        const data: Category[] = await res.json();
-        setCategories(data);
-      } catch (err) {
-        if (err instanceof DOMException && err.name === 'AbortError') return;
-        setError(err instanceof Error ? err.message : 'Something went wrong');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadCategories();
-    return () => controller.abort();
-  }, []);
 
   const defaultFilter = dashboard ? 'mine' : 'all';
   const currentFilter = searchParams.get('filter') ?? defaultFilter;
@@ -120,16 +91,6 @@ export default function SearchFilterBar() {
           </SelectGroup>
           <SelectGroup>
             <SelectLabel>Category</SelectLabel>
-            {loading && (
-              <SelectItem value="__loading" disabled>
-                Loading...
-              </SelectItem>
-            )}
-            {error && (
-              <SelectItem value="__error" disabled>
-                Couldn&apos;t load categories
-              </SelectItem>
-            )}
             {categories.map((category) => (
               <SelectItem key={category.id} value={category.id}>
                 {category.name}
