@@ -1,37 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import {
-  fetchFormattedActivity,
-  syncActivityRelations,
-  type ActivityWriteBody,
-} from "@/lib/activities";
+import { syncActivityRelations, type ActivityWriteBody } from "@/lib/activities";
 import { removeStorageFiles } from "@/lib/storage";
 
-// 1. GET - Read single activity
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params;
-    const supabase = await createClient();
-
-    const activity = await fetchFormattedActivity(supabase, id);
-    if (!activity) {
-      return NextResponse.json(
-        { error: "Activity not found", code: "NOT_FOUND" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(activity, { status: 200 });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Internal Server Error";
-    return NextResponse.json({ error: message, code: "SERVER_ERROR" }, { status: 500 });
-  }
-}
-
-// 2. PATCH - Update activity & sync categories, assignments, attachments
+// PATCH - Update activity & sync categories, assignments, attachments
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -91,7 +63,7 @@ export async function PATCH(
       staleFileUrls.push(...(removedRows ?? []).map((a) => a.url));
     }
 
-        // The DB trigger can change the id (slug) when the title changes,
+    // The DB trigger can change the id (slug) when the title changes,
     // so track it and use the new id for everything after the update.
     let activityId = id;
 
@@ -132,18 +104,10 @@ export async function PATCH(
     // A failure here leaves orphaned files, not broken data, so report it without failing the request.
     const storageError = await removeStorageFiles(supabase, staleFileUrls);
 
-    // Return the updated formatted activity
-    const updated = await fetchFormattedActivity(supabase, activityId);
-    if (!updated) {
-      return NextResponse.json(
-        { error: "Activity not found after update", code: "NOT_FOUND" },
-        { status: 404 }
-      );
-    }
-
+    // Return the updated activity
     return NextResponse.json(
       {
-        ...updated,
+        id: activityId,
         ...(storageError ? { warning: `Storage cleanup incomplete: ${storageError}` } : {}),
       },
       { status: 200 }
@@ -154,7 +118,7 @@ export async function PATCH(
   }
 }
 
-// 3. DELETE - Delete activity and its child rows
+// DELETE - Delete activity and its child rows
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { getActivity } from "@/lib/activities";
+import { getActivity, getAssignedActivityIds } from "@/lib/activities";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,26 +19,7 @@ export default async function ActivityPage({ params }: PageProps) {
   const activity = await getActivity(supabase, id);
 
   if (!activity) notFound();
-
-  // getUser validates the session
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-   // Activity IDs assigned to this user
-  let assignedIds = new Set<string>();
-  if (user) {
-    const { data, error } = await supabase
-      .from("activity_assignments")
-      .select("activity_id")
-      .eq("user_id", user.id);
-
-    if (error) {
-      console.error("Failed to load assignments:", error.message);
-    } else {
-      assignedIds = new Set(data.map((row) => row.activity_id));
-    }
-  }
+  const assignedIds = await getAssignedActivityIds(supabase);
 
   return (
     <div className="container mx-auto px-4 py-8">

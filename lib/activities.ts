@@ -1,8 +1,12 @@
 import { randomUUID } from "crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
+// Limit number of bytes in attachment storage a user can upload
 export const MAX_ATTACHMENT_BYTES = 25 * 1024 * 1024;
+// Limit character length of category names
+const MAX_CATEGORY_NAME_LENGTH = 60;
 
+// Define types related to activities
 export type Attachment = {
   id: number;
   name: string;
@@ -32,18 +36,6 @@ type ActivityRow = Omit<Activity, "categories"> & {
   }[];
 };
 
-export type FormattedActivity = {
-  id: string;
-  title: string;
-  description: string;
-  imageSrc: string | null;
-  imageAlt: string | null;
-  sortOrder: number | null;
-  categoryIds: string[];
-  assignedUserIds: string[];
-  attachments: Attachment[];
-};
-
 export type NewAttachmentInput = {
   name: string;
   url: string;
@@ -61,36 +53,14 @@ export type ActivityWriteBody = {
   newAttachments?: NewAttachmentInput[];
 };
 
-export async function getActivity(
-  supabase: SupabaseClient,
-  id: string
-): Promise<Activity | null> {
-  const { data, error } = await supabase
-    .from("activities")
-    .select(
-      `
-      id,
-      title,
-      description,
-      image_src,
-      image_alt,
-      attachments ( id, name, url, size_bytes ),
-      activity_categories (
-        sort_order,
-        categories ( id, name )
-      )
-    `
-    )
-    .eq("id", id)
-    .order("id", { referencedTable: "attachments" })
-    .order("sort_order", { referencedTable: "activity_categories" })
-    .maybeSingle();
+const ACTIVITY_SELECT = `
+  id, title, description, image_src, image_alt,
+  attachments ( id, name, url, size_bytes ),
+  activity_categories ( sort_order, categories ( id, name ) )
+`;
 
-  if (error) throw error;
-  if (!data) return null;
-
-  const { activity_categories, ...activity } = data as unknown as ActivityRow;
-
+function toActivity(row: ActivityRow): Activity {
+  const { activity_categories, ...activity } = row;
   return {
     ...activity,
     categories: activity_categories
@@ -99,89 +69,53 @@ export async function getActivity(
   };
 }
 
+export async function getActivity(
+  supabase: SupabaseClient,
+  id: string
+): Promise<Activity | null> {
+  const { data, error } = await supabase
+    .from("activities")
+    .select(ACTIVITY_SELECT)
+    .eq("id", id)
+    .order("id", { referencedTable: "attachments" })
+    .order("sort_order", { referencedTable: "activity_categories" })
+    .maybeSingle();
+
+  if (error) throw error;
+  return data ? toActivity(data as unknown as ActivityRow) : null;
+}
+
 export async function getActivities(
   supabase: SupabaseClient
 ): Promise<Activity[]> {
   const { data, error } = await supabase
     .from("activities")
-    .select(
-      `
-      id,
-      title,
-      description,
-      image_src,
-      image_alt,
-      attachments ( id, name, url, size_bytes ),
-      activity_categories (
-        sort_order,
-        categories ( id, name )
-      )
-    `
-    )
+    .select(ACTIVITY_SELECT)
     .order("sort_order")
     .order("id", { referencedTable: "attachments" })
     .order("sort_order", { referencedTable: "activity_categories" });
 
   if (error) throw error;
-
-  return (data as unknown as ActivityRow[]).map(
-    ({ activity_categories, ...activity }) => ({
-      ...activity,
-      categories: activity_categories
-        .map((ac) => ac.categories)
-        .filter((c): c is Category => c !== null),
-    })
-  );
+  return (data as unknown as ActivityRow[]).map(toActivity);
 }
 
-/** Reads an activity plus its categories, assignments and attachments. */
-export async function fetchFormattedActivity(
-  supabase: SupabaseClient,
-  id: string
-): Promise<FormattedActivity | null> {
-  const { data: activity, error } = await supabase
-    .from("activities")
-    .select("id, title, description, image_src, image_alt, sort_order")
-    .eq("id", id)
-    .maybeSingle();
+// Get activity IDs that are assigned to the user from activity_assignments table
+export async function getAssignedActivityIds(
+  supabase: SupabaseClient
+): Promise<Set<string>> {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return new Set();
 
-  if (error) throw new Error(error.message);
-  if (!activity) return null;
+  const { data, error } = await supabase
+    .from("activity_assignments")
+    .select("activity_id")
+    .eq("user_id", user.id);
 
-  const [categories, assignments, attachments] = await Promise.all([
-    supabase
-      .from("activity_categories")
-      .select("category_id, sort_order")
-      .eq("activity_id", id)
-      .order("sort_order", { ascending: true }),
-    supabase.from("activity_assignments").select("user_id").eq("activity_id", id),
-    supabase
-      .from("attachments")
-      .select("id, name, url, size_bytes")
-      .eq("activity_id", id)
-      .order("id", { ascending: true }),
-  ]);
-
-  for (const result of [categories, assignments, attachments]) {
-    if (result.error) throw new Error(result.error.message);
+  if (error) {
+    console.error("Failed to load assignments:", error.message);
+    return new Set();
   }
-
-  return {
-    id: activity.id,
-    title: activity.title,
-    description: activity.description ?? "",
-    imageSrc: activity.image_src ?? null,
-    imageAlt: activity.image_alt ?? null,
-    sortOrder: activity.sort_order ?? null,
-    categoryIds: (categories.data ?? []).map((c) => c.category_id),
-    assignedUserIds: (assignments.data ?? []).map((a) => a.user_id),
-    attachments: (attachments.data ?? []).map((a) => ({
-      id: a.id,
-      name: a.name,
-      url: a.url,
-      size_bytes: Number(a.size_bytes ?? 0),
-    })),
-  };
+  return new Set(data.map((row) => row.activity_id));
 }
 
 export const slugify = (s: string) =>
@@ -190,8 +124,6 @@ export const slugify = (s: string) =>
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-
-const MAX_CATEGORY_NAME_LENGTH = 60;
 
 /**
  * Turns typed-in category names into category ids. Names that already exist

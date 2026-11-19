@@ -2,47 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { createClient } from "@/lib/supabase/server";
 import {
-  fetchFormattedActivity,
   slugify,
   syncActivityRelations,
   type ActivityWriteBody,
 } from "@/lib/activities";
 
-// 1. GET - List activities (ordered by sort_order)
-export async function GET() {
-  try {
-    const supabase = await createClient();
-
-    const { data, error } = await supabase
-      .from("activities")
-      .select("id, title, description, image_src, image_alt, sort_order")
-      .order("sort_order", { ascending: true });
-
-    if (error) {
-      return NextResponse.json(
-        { error: error.message, code: "DATABASE_ERROR" },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json(
-      (data ?? []).map((a) => ({
-        id: a.id,
-        title: a.title,
-        description: a.description ?? "",
-        imageSrc: a.image_src,
-        imageAlt: a.image_alt,
-        sortOrder: a.sort_order,
-      })),
-      { status: 200 }
-    );
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Internal Server Error";
-    return NextResponse.json({ error: message, code: "SERVER_ERROR" }, { status: 500 });
-  }
-}
-
-// 2. POST - Create an activity (assigned to the signed-in user) with its categories and attachments
+// POST - Create an activity assigned to the signed-in user with its categories and attachments
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
@@ -107,8 +72,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const created = await fetchFormattedActivity(supabase, id);
-    return NextResponse.json(created, { status: 201 });
+    return NextResponse.json({ id }, { status: 201 });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Internal Server Error";
     return NextResponse.json({ error: message, code: "SERVER_ERROR" }, { status: 500 });

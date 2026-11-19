@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { getActivities } from "@/lib/activities";
+import { getActivities, getAssignedActivityIds } from "@/lib/activities";
 import ActivityCard from "@/app/ui/ActivityCard";
 
 export default async function ActivityDashboard({
@@ -11,26 +11,7 @@ export default async function ActivityDashboard({
 }) {
   const supabase = await createClient();
   const activities = await getActivities(supabase);
-
-  // getUser validates the session
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // Activity IDs assigned to this user
-  let assignedIds = new Set<string>();
-  if (user) {
-    const { data, error } = await supabase
-      .from("activity_assignments")
-      .select("activity_id")
-      .eq("user_id", user.id);
-
-    if (error) {
-      console.error("Failed to load assignments:", error.message);
-    } else {
-      assignedIds = new Set(data.map((row) => row.activity_id));
-    }
-  }
+  const assignedIds = await getAssignedActivityIds(supabase);
 
   // Apply the filter
   let visibleActivities = activities;
@@ -38,18 +19,9 @@ export default async function ActivityDashboard({
   if (filter === "mine") {
     visibleActivities = activities.filter((a) => assignedIds.has(a.id));
   } else if (filter !== "all") {
-    // Anything else is treated as a category id
-    const { data, error } = await supabase
-      .from("activity_categories")
-      .select("activity_id")
-      .eq("category_id", filter);
-
-    if (error) {
-      console.error("Failed to load category filter:", error.message);
-    } else {
-      const categoryActivityIds = new Set(data.map((row) => row.activity_id));
-      visibleActivities = activities.filter((a) => categoryActivityIds.has(a.id));
-    }
+    visibleActivities = activities.filter((a) =>
+      a.categories.some((c) => c.id === filter)
+    );
   }
 
   // Apply the search to whatever the filter left

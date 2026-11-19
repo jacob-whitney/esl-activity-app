@@ -6,15 +6,13 @@ import { ArrowRightIcon, DocumentArrowUpIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
 import { MAX_ATTACHMENT_BYTES } from '@/lib/activities';
-import type { FormattedActivity, NewAttachmentInput } from '@/lib/activities';
+import type { Activity, Category, NewAttachmentInput } from '@/lib/activities';
 
 // Supabase Storage bucket for uploaded images and attachments (public bucket assumed)
 const STORAGE_BUCKET = 'activities';
 
-type Category = { id: string; name: string };
-
 type Props = {
-  activity?: FormattedActivity;
+  activity?: Activity;
   categories: Category[];
 };
 
@@ -41,11 +39,11 @@ export default function ActivityForm({ activity, categories }: Props) {
   // activities table fields
   const [title, setTitle] = useState(activity?.title ?? '');
   const [description, setDescription] = useState(activity?.description ?? '');
-  const [imageAlt, setImageAlt] = useState(activity?.imageAlt ?? '');
+  const [imageAlt, setImageAlt] = useState(activity?.image_alt ?? '');
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   // relations
-  const [categoryIds, setCategoryIds] = useState<string[]>(activity?.categoryIds ?? []);
+  const [categoryIds, setCategoryIds] = useState<string[]>(activity?.categories.map((c) => c.id) ?? []);
   const [newCategories, setNewCategories] = useState<string[]>([]);
   const [categoryInput, setCategoryInput] = useState('');
 
@@ -56,14 +54,13 @@ export default function ActivityForm({ activity, categories }: Props) {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [saved, setSaved] = useState(false);
 
   const existingBytes = existingAttachments.reduce((sum, a) => sum + a.size_bytes, 0);
   const newBytes = newFiles.reduce((sum, f) => sum + f.size, 0);
   const totalBytes = existingBytes + newBytes;
   const overLimit = totalBytes > MAX_ATTACHMENT_BYTES;
 
-  const featuredImageName = imageFile?.name ?? activity?.imageSrc?.split('/').pop() ?? null;
+  const featuredImageName = imageFile?.name ?? activity?.image_src?.split('/').pop() ?? null;
 
   const toggle = (list: string[], value: string) =>
     list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
@@ -88,8 +85,8 @@ export default function ActivityForm({ activity, categories }: Props) {
   };
 
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-  e.preventDefault();
-  if (overLimit) return;
+    e.preventDefault();
+    if (overLimit) return;
 
     setSubmitting(true);
     setError(null);
@@ -360,7 +357,6 @@ export default function ActivityForm({ activity, categories }: Props) {
 
           <div className="flex min-h-8 items-end space-x-1" aria-live="polite">
             {error && <p className="text-xs text-destructive">{error}</p>}
-            {saved && !error && <p className="text-xs text-foreground/70">Activity saved.</p>}
           </div>
         </div>
       </div>
